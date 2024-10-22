@@ -21,7 +21,8 @@ Este projeto facilita a construção de templates clássicos para fluxos de dado
 ├── .python-version
 ├── poetry.lock
 ├── pyproject.toml
-``````
+```
+
 
 ## Requisitos
 
@@ -34,9 +35,8 @@ Certifique-se de ter os seguintes pré-requisitos instalados:
 ## Instalação
 
 1. Clone o repositório:
-
     ```bash
-    git clone https://github.com/yourusername/gcp-classic-template-dataflow.git
+    git clone https://github.com/yourusername/cp-classic-template-dataflow.git
     ```
 
 2. Navegue até o diretório do projeto:
@@ -66,25 +66,27 @@ Comece carregando as variáveis de ambiente definidas em seu arquivo `.env` com 
 export $(cat classic_template/.env | xargs)
 ```
 
->⚠️ Utilize o arquivo classic_template/exemplo.env como base.
+!!! tip "Dica"
+    Utilize o arquivo classic_template/exemplo.env como base.
 
 ### Configuração do Bucket
 
 Para criar o bucket, execute o seguinte script:
-```bash
+```bash title="create_bucket.sh"
 gcloud storage buckets create gs://$BUCKET_NAME --default-storage-class STANDARD --location $REGION
 ```
-Dentro do bucket, crie um diretório chamado `input` e faça o upload do arquivo `input/sample.csv`.
+!!! note "Nota"
+    Dentro do bucket, crie um diretório chamado `input` e faça o upload do  arquivo `input/sample.csv`.
 
 ### Construção do Template
 Prepare o template executando o script `build_template.sh` na pasta `setup_env`:
-```bash
+```bash title="build_template.sh"
 sh setup_env/build_template.sh
 ```
 
 ### Implantação
 Para criar um job com base no template, execute o seguinte comando:
-```bash
+```bash 
 sh setup_env/deploy_job.sh
 ```
 

@@ -5,15 +5,11 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "classic_templates/**"
+      - "classic_template/*"
       - ".github/workflows/*"
       - "pyproject.toml"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# Configure env variables
-env:
-  RUNNER: DataflowRunner
      
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -43,8 +39,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Install dependencies
         run: |
-          pip install pipx
-          pipx install poetry
+          pip install poetry
           poetry install
 
       # Performs authentication on Google Cloud with a json credential allocated in secret github
@@ -57,17 +52,17 @@ jobs:
       # Configura o Cloud SDK
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
-      
+
       # Runs command gsutil for syns dags
       - name: build template in bucket
         run: |
-          poetry run python $TEMPLATE_SOURCE_PATH \
+          poetry run python -m classic_template.pipe_voos_to_bigquery \
             --project_id ${{ vars.PROJECT }} \
           	--table_name $TABLE_NAME \
           	--dataset_name $DATASET_NAME \
           	--bucket_name ${{ vars.BUCKET_NAME }} \
           	--data_source $DATA_SOURCE \
-          	--runner $RUNNER \
+          	--runner DataflowRunner \
           	--project ${{ vars.PROJECT }} \
           	--staging_location gs://${{ vars.BUCKET_NAME }}/staging \
           	--template_location gs://${{ vars.BUCKET_NAME }}/templates/$TEMPLATE_NAME \
